@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+abstract: "An R Package for conducting Bayesian Component Network Meta Analysis in R"
+authors:
+- family-names: Field
+  given-names: Ryan
+  affiliation: University of Glasgow
+  orcid: https://orcid.org/0000-0002-4424-9890
+date-released: 2023-07-20
+keywords:
+- Component Network Meta Analysis
+- CNMA
+- Bayesian
+license: GPL-3.0-or-later
+message: If you use this software, please cite it using these metadata.
+repository-code: MetaCNMABayes
+title: "Bayesian Component Network Meta Analysis in R"
+version: 0.1.0

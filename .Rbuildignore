@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$
+^docs$
+^pkgdown$
+README.md
+^CRAN-RELEASE$
+^cran-comments.md$
+CITATION.cff
