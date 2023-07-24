@@ -1,0 +1,15 @@
+Package: MetaCNMABayes
+Type: Package
+Title: Bayesian Component Network Meta Analysis in R
+Version: 0.1.0
+Authors@R: c(
+          person("Ryan", "Field", email = "ryan.field@glasgow.ac.uk",
+          role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4424-9890")),
+          person("Suzanne", "Freeman", email = "suzanne.freeman@leicester.ac.uk",
+          role = "aut", comment = c(ORCID = "0000-0001-8045-4405"))
+          )
+Maintainer: Ryan Field <ryan.field@glasgow.ac.uk>
+Description: An R Package for conducting Bayesian Component Network Meta Analysis in R.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
