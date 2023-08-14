@@ -36,7 +36,6 @@ stan_data <- list(
   n_components = nt,
   n = n,
   r = r,
-  #d = d,
   c1 = C1,
   c2 = C2,
   c4 = C4,
@@ -51,7 +50,7 @@ stan_data <- list(
   c14 = C14
 )
 
-n_chains = 1
+n_chains = 3
 
 d1 <- c(0, rep(0.1, nt-1))
 d2 <- c(0, rep(0.2, nt-1))
@@ -69,10 +68,10 @@ stan_fit <- stan(
   file = "inst/test.stan",
   data = stan_data,
   chains = n_chains,
-  warmup = 1000,
-  iter = 4000,
+  warmup = 270000,
+  iter = 450000,
   #refresh = 0,
-  #init = inits,
+  init = inits,
   #algorithm = "HMC",
-  control = list(max_treedepth = 10, adapt_delta = 0.95, stepsize = 0.01)
+  control = list(max_treedepth = 12, adapt_delta = 0.95, stepsize = 0.01)
 )
