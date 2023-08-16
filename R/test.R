@@ -15,8 +15,6 @@ n <- array(c(data$Total.TAU, data$Total.INT), dim=c(Ntrials, 2))
 # Number of events in each arm
 r <- array(c(data$Events.TAU, data$Events.INT), dim=c(Ntrials, 2))
 
-d <- array(c(rep(as.integer(0), nt)))
-
 C1 <- array(c(rep(0, Ntrials), data$C1), dim=c(Ntrials, 2))
 C2 <- array(c(rep(0, Ntrials), data$C2), dim=c(Ntrials, 2))
 C4 <- array(c(rep(0, Ntrials), data$C4), dim=c(Ntrials, 2))
@@ -52,9 +50,13 @@ stan_data <- list(
 
 n_chains = 3
 
-d1 <- c(0, rep(0.1, nt-1))
-d2 <- c(0, rep(0.2, nt-1))
-d3 <- c(0, rep(-0.1, nt-1))
+# d1 <- c(0, rep(0.1, nt-1))
+# d2 <- c(0, rep(0.2, nt-1))
+# d3 <- c(0, rep(-0.1, nt-1))
+
+d1 <- c(rep(0.1, nt-1))
+d2 <- c(rep(0.2, nt-1))
+d3 <- c(rep(-0.1, nt-1))
 
 mu1 <- c(rep(0.1, Ntrials))
 mu2 <- c(rep(0.3, Ntrials))
@@ -68,10 +70,11 @@ stan_fit <- stan(
   file = "inst/test.stan",
   data = stan_data,
   chains = n_chains,
-  warmup = 270000,
-  iter = 450000,
+  warmup = 50000,
+  iter = 100000,
   #refresh = 0,
   init = inits,
+  seed = 12345,
   #algorithm = "HMC",
-  control = list(max_treedepth = 12, adapt_delta = 0.95, stepsize = 0.01)
+  control = list(max_treedepth = 15, adapt_delta = 0.95, stepsize = 0.01)
 )

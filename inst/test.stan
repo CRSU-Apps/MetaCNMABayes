@@ -47,39 +47,35 @@ transformed data {
 parameters {
 
   vector [n_trials] mu;
-  vector[n_components] d;
+  vector[n_components-1] d;
+  //vector[n_components] D;
   //real theta[n_components];
 
 }
 transformed parameters {
   //vector[n_components] d;
-  vector[n_components] beta;
+  ///vector[n_components] beta;
   //real hemp = d[2] + d[3] + d[5] + d[6] + d[7] + d[8] + d[10] + d[11] + d[12] + d[13];
+  // beta[1] = 0;
   // for (k in 2:n_components){
-  //   d[k] = theta[k];
+  //   beta[k] = d[k];
   // }
-  beta[1] = 0;
-  for (k in 2:n_components){
-    beta[k] = d[k];
-  }
 }
 model {
   vector [max(n_arms)] p[n_trials];
 
+  for(i in 1:(n_components - 1)){
+    d[i] ~ normal(0, 1000);
+  }
+
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
     for (k in 1:n_arms[i]){
-      d[k] ~ normal(0, 1000);
-      p[i,k] = mu[i] + d[2]*c1[i, k] + d[3]*c2[i, k] + d[4]*c4[i, k] + d[5]*c5[i, k] + d[6]*c6[i, k]
-      + d[7]*c7[i, k] + d[8]*c8[i, k] + d[9]*c9[i, k] + d[10]*c11[i, k] + d[11]*c12[i, k]
-      + d[12]*c14[i, k] + d[13]*c13[i, k] - beta[1];
+      p[i,k] = mu[i] + d[1]*c1[i, k] + d[2]*c2[i, k] + d[3]*c4[i, k] + d[4]*c5[i, k] + d[5]*c6[i, k]
+      + d[6]*c7[i, k] + d[7]*c8[i, k] + d[8]*c9[i, k] + d[9]*c11[i, k] + d[10]*c12[i, k]
+      + d[11]*c14[i, k] + d[12]*c13[i, k] - 0;
       r[i,k] ~ binomial_logit(n[i,k], p[i,k]);
     }
   }
-//
-//   for (k in 2:n_components){
-//     d[k] ~ normal(0,0.001);
-//   }
-
 
 }

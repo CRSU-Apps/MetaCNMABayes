@@ -10,6 +10,18 @@ Authors@R: c(
           )
 Maintainer: Ryan Field <ryan.field@glasgow.ac.uk>
 Description: An R Package for conducting Bayesian Component Network Meta Analysis in R.
+URL: https://github.com/CRSU-Apps/MetaCNMABayes
+BugReports: https://github.com/CRSU-Apps/MetaCNMABayes/issues
+Imports:
+  BH,
+  StanHeaders,
+  Rcpp,
+  RcppEigen,
+  RcppParallel,
+  inline,
+  loo,
+  pkgbuild,
+  rstan
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
