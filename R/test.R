@@ -41,7 +41,7 @@ stan_data <- list(
   c6 = C6,
   c7 = C7,
   c8 = C8,
-  c9 = C8,
+  c9 = C9,
   c11 = C11,
   c12 = C12,
   c13 = C13,
@@ -70,11 +70,28 @@ stan_fit <- stan(
   file = "inst/test.stan",
   data = stan_data,
   chains = n_chains,
-  warmup = 50000,
+  warmup = 10000,
   iter = 100000,
   #refresh = 0,
   init = inits,
   seed = 12345,
   #algorithm = "HMC",
-  control = list(max_treedepth = 15, adapt_delta = 0.95, stepsize = 0.01)
+  control = list(max_treedepth = 10, adapt_delta = 0.95, stepsize = 0.01)
 )
+
+draws <- extract(stan_fit)
+stan_summary <- as.data.frame(summary(stan_fit, pars = c("d"))$summary)
+
+# To remove weighting from plot
+symbol.size=c(rep(1,12))
+
+#d <- stan_summary$mean
+#se <- stan_summary$se_mean
+
+comp.names <- c("Re-orientation & familiar objects", "Reducing sensory deprivation", "Cognitive stimulation",
+                "Nutrition & hydration", "Identification of infection", "Mobilisation", "Sleep hygiene", "Oxygenation",
+                "Pain control", "Medication review", "Bowel & Bladder care", "Assessment of Mood")
+
+metafor::forest(x=stan_summary$mean, ci.lb=stan_summary$`2.5%`, ci.ub=stan_summary$`97.5%`, slab=comp.names, transf = exp,
+       xlab="Odds Ratio", refline=1, xlim=c(-6,15), at=c(0,  1, 2, 5, 10),
+       psize=symbol.size, cex=0.9, header=c("Component", "OR (95% CrI)"))
