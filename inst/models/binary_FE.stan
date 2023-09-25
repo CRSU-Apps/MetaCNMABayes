@@ -10,8 +10,8 @@ data {
   // number of events per arm
   int r[n_trials, max(n_arms)];
   // Component Array
-  //real components[n_components, n_trials, max(n_arms)];
-  vector[max(n_arms)] components[n_components, n_trials];
+  real components[n_components, n_trials, max(n_arms)];
+  //vector[max(n_arms)] components[n_components, n_trials];
 }
 parameters {
   vector [n_trials] mu;
@@ -35,7 +35,7 @@ model {
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
     for (k in 1:n_arms[i]){
-      p[i,k] = mu[i] + (D * components[,i,k]);
+      p[i,k] = mu[i] + (D * to_vector(components[,i,k]));
       r[i,k] ~ binomial_logit(n[i,k], p[i,k]);
     }
   }

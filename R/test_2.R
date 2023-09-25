@@ -28,20 +28,19 @@ C12 <- array(c(rep(0, Ntrials), data$C12), dim=c(Ntrials, 2))
 C13 <- array(c(rep(0, Ntrials), data$C13), dim=c(Ntrials, 2))
 C14 <- array(c(rep(0, Ntrials), data$C14), dim=c(Ntrials, 2))
 
-COMP <- array(c(
-  C1,
-  C2,
-  C4,
-  C5,
-  C6,
-  C7,
-  C8,
-  C9,
-  C11,
-  C12,
-  C13,
-  C14
-),dim=c(nt, Ntrials, 2))
+COMP <- array(0,dim=c(nt, Ntrials, 2))
+COMP[1,,] <- C1
+COMP[2,,] <- C2
+COMP[3,,] <- C4
+COMP[4,,] <- C5
+COMP[5,,] <- C6
+COMP[6,,] <- C7
+COMP[7,,] <- C8
+COMP[8,,] <- C9
+COMP[9,,] <- C11
+COMP[10,,] <- C12
+COMP[11,,] <- C13
+COMP[12,,] <- C14
 
 stan_data <- list(
   n_trials = Ntrials,
@@ -53,10 +52,6 @@ stan_data <- list(
 )
 
 n_chains = 3
-
-# d1 <- c(0, rep(0.1, nt-1))
-# d2 <- c(0, rep(0.2, nt-1))
-# d3 <- c(0, rep(-0.1, nt-1))
 
 d1 <- c(rep(0.1, nt))
 d2 <- c(rep(0.2, nt))
@@ -74,8 +69,8 @@ stan_fit <- stan(
   file = "inst/binary_FE.stan",
   data = stan_data,
   chains = n_chains,
-  warmup = 5000,
-  iter = 10000,
+  warmup = 10000,
+  iter = 100000,
   init = inits,
   seed = 12345,
   control = list(max_treedepth = 10, adapt_delta = 0.95, stepsize = 0.01)
@@ -86,9 +81,6 @@ stan_summary <- as.data.frame(summary(stan_fit, pars = c("d"))$summary)
 
 # To remove weighting from plot
 symbol.size=c(rep(1,12))
-
-#d <- stan_summary$mean
-#se <- stan_summary$se_mean
 
 comp.names <- c("Re-orientation & familiar objects", "Reducing sensory deprivation", "Cognitive stimulation",
                 "Nutrition & hydration", "Identification of infection", "Mobilisation", "Sleep hygiene", "Oxygenation",
