@@ -66,7 +66,7 @@ inits <- list(list(d=d1, mu=mu1),
               list(d=d3, mu=mu3))
 
 stan_fit <- stan(
-  file = "inst/binary_FE.stan",
+  file = "inst/models/binary_FE.stan",
   data = stan_data,
   chains = n_chains,
   warmup = 10000,
