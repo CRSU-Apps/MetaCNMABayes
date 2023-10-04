@@ -50,3 +50,6 @@ rsconnect/
 
 # Compiled Stan Models
 inst/models/*.rds
+
+# Mac
+.DS_Store
