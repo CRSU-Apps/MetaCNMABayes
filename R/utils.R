@@ -60,6 +60,13 @@ get_most_frequent_component <- function(components_column) {
 format_data <- function(df, control = NULL) {
   # Convert columns to lowercase
   names(df) <- tolower(names(df))
+  # Require dplyr for magnittr pipe (%>%)
+  require(dplyr)
+  # Group data by study (as a factor)
+  # ensuring data is in the same order for each function
+  df <- df %>%
+    dplyr::mutate(study = as.factor(study)) %>% # nolint: object_usage
+    dplyr::group_by(study)
   n_trials <- length(levels(as.factor(df$study)))
   if (is.null(control)) {
     control <- get_most_frequent_component(df$components)
@@ -84,6 +91,7 @@ get_n_arms <- function(df) {
     dplyr::mutate(n = n()) %>%
     dplyr::select(study, n) %>%
     dplyr::filter(row_number() == 1)
+  return(as.numeric(tmp_data$n))
 }
 
 get_n_array <- function(data, control, column = "events") {
