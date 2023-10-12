@@ -35,5 +35,6 @@ fit_binary_fe <- function(
       stepsize = stepsize
     )
   )
+  gc()
   return(stan_fit)
 }

@@ -205,7 +205,6 @@ get_component_array <- function(df, control_component = NULL) {
   component_array <- array(NA, dim = c(n_components, n_trials, max_arms))
   for(component in seq_len(n_components)){
     tmp_component <- components[component]
-    print(tmp_component)
     for(study_id in seq_len(max(tmp_df$study_id))) {
       component_array[component, study_id, 1] <- 0
       tmp_study <- tmp_df[tmp_df$study_id == study_id, ]
