@@ -22,8 +22,8 @@ fit_binary_fe <- function(
   options(mc.cores = parallel::detectCores()) # Parallelize chains
 
   stan_data <- format_data(df, "binary", control_component)
-  stan_fit <- rstan::stan(
-    file = system.file("models", "binary_FE.stan", package = "MetaCNMABayes"),
+  stan_fit <- rstan::sampling(
+    stanmodels$binary_fe,
     data = stan_data,
     chains = chains,
     warmup = warmup,
