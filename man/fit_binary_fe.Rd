@@ -6,7 +6,7 @@
 \usage{
 fit_binary_fe(
   data,
-  control_component = NULL,
+  reference_component,
   outcome = "OR",
   chains = 3,
   warmup = 500,
@@ -20,7 +20,7 @@ fit_binary_fe(
 \arguments{
 \item{data}{a dataframe containing the required columns see details.}
 
-\item{control_component}{(optional) a character specifying
+\item{reference_component}{a character specifying
 the control component}
 
 \item{outcome}{(optional) a character specifying the outcome measure.

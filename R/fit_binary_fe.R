@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param data a dataframe containing the required columns see details.
-#' @param control_component (optional) a character specifying
+#' @param reference_component a character specifying
 #' the control component
 #' @param outcome (optional) a character specifying the outcome measure.
 #' The default is \code{"OR"}
@@ -25,7 +25,7 @@
 #' }
 fit_binary_fe <- function(
   data,
-  control_component = NULL,
+  reference_component,
   outcome = "OR",
   chains = 3,
   warmup = 500,
@@ -41,6 +41,9 @@ fit_binary_fe <- function(
   if (! outcome == "OR" | outcome == "RR") {
     stop("Outcome must be OR or RR")
   }
+  if (missing(reference_component)) {
+    stop("Reference Component cannot be missing")
+  }
   df <- data
   if (is_wide(data)) {
     df <- data_wide_to_long(data)
@@ -50,9 +53,11 @@ fit_binary_fe <- function(
   rstan::rstan_options(auto_write = TRUE) # Cache compiled Stan programs
   options(mc.cores = parallel::detectCores()) # Parallelize chains
 
-  components <- get_comps_no_control_component(sort_data(df)$components)
+  components <- get_components_no_ref(
+    sort_data(df)$components, reference_component
+  )
 
-  stan_data <- format_data(df, "binary", control_component)
+  stan_data <- format_data(df, "binary", reference_component)
   stan_fit <- rstan::sampling(
     stanmodels$binary_fe, # nolint: object_usage
     data = stan_data,
