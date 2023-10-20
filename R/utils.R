@@ -1,14 +1,3 @@
-#' data_wide_to_long
-#'
-#' @description
-#' Internal function for converting wide format data to long format
-#'
-#'
-#' @param df data.frame, to be converted from wide to long
-#'
-#' @return data.frame, converted from wide to long
-#'
-#' @examples
 data_wide_to_long <- function(df) {
   tidyr::pivot_longer(
     df,
@@ -18,17 +7,6 @@ data_wide_to_long <- function(df) {
   )
 }
 
-#' is_wide
-#'
-#' @description
-#' Internal function to check if a data.frame is in a wide format
-#'
-#'
-#' @param df data.frame, to be checked if in wide format
-#'
-#' @return logical, true if in wide format
-#'
-#' @examples
 is_wide <- function(df) {
   return(any(grepl("(.+)\\.(\\d+)", names(df))))
 }
@@ -50,13 +28,10 @@ get_unique_components <- function(components_column) {
   )
 }
 
-get_comps_no_control_component <-
-  function(components_column, control_component = NULL) {
-    if (is.null(control_component)) {
-      control_component <- get_most_frequent_component(components_column)
-    }
+get_components_no_ref <-
+  function(components_column, reference_component) {
     tmp_components <- get_unique_components(components_column)
-    tmp_components <- tmp_components[!tmp_components == control_component]
+    tmp_components <- tmp_components[!tmp_components == reference_component]
     return(tmp_components)
   }
 
@@ -69,18 +44,13 @@ get_n_components <- function(components_column) {
   length(get_unique_components(components_column)) - 1
 }
 
-get_most_frequent_component <- function(components_column) {
-  components <- get_single_components(components_column)
-  component_frequency <- data.frame(table(components))
-  most_frequent_component <-
-    component_frequency[which.max(component_frequency$Freq), ]$components
-  return(most_frequent_component)
-}
-
-sort_data <- function(df) {
-  require(dplyr)
+sort_data <- function(df, reference_component) {
+  `%>%` <- magrittr::`%>%`
   tmp_df <- df
   names(tmp_df) <- tolower(names(tmp_df))
+  if (!missing(reference_component)) {
+    tmp_df <- reorder_data(tmp_df, reference_component)
+  }
   tmp_df <- tmp_df %>%
     dplyr::mutate(study = as.factor(study)) %>% # nolint: object_usage
     dplyr::group_by(study) %>%
@@ -88,12 +58,27 @@ sort_data <- function(df) {
   return(tmp_df)
 }
 
-format_data <- function(df, data_type, control_component = NULL) {
-  df <- sort_data(df)
-  n_trials <- get_n_trials(df)
-  if (is.null(control_component)) {
-    control_component <- get_most_frequent_component(df$components)
+reorder_data <- function(df, reference_component) {
+  tmp_df_ref <- data.frame()
+  tmp_df_no_ref <- data.frame()
+
+  for (row_i in seq_len(nrow(df))) {
+    tmp_row <- df[row_i,]
+    row_components <- get_all_components(tmp_row$components)
+    if (reference_component %in% row_components) {
+      tmp_df_ref <- rbind(tmp_df_ref, tmp_row)
+    } else {
+      tmp_df_no_ref <- rbind(tmp_df_no_ref, tmp_row)
+    }
   }
+
+  tmp_df <- rbind(tmp_df_ref, tmp_df_no_ref)
+  return(tmp_df)
+}
+
+format_data <- function(df, data_type, reference_component) {
+  df <- sort_data(df, reference_component)
+  n_trials <- get_n_trials(df)
   n_arms <- get_n_arms(df)
   n_components <- get_n_components(df$components)
   if (data_type == "binary") {
@@ -101,7 +86,7 @@ format_data <- function(df, data_type, control_component = NULL) {
       df,
       n_trials,
       n_arms, n_components,
-      control_component
+      reference_component
     ))
   } else {
     return(format_data_continous(
@@ -109,7 +94,7 @@ format_data <- function(df, data_type, control_component = NULL) {
       n_trials,
       n_arms,
       n_components,
-      control_component
+      reference_component
     ))
   }
 }
@@ -119,12 +104,12 @@ format_data_binary <- function(
   n_trials,
   n_arms,
   n_components,
-  control_component = NULL
+  reference_component
 ) {
-  tmp_df <- sort_data(df)
-  r <- get_n_array(tmp_df)
-  n <- get_n_array(tmp_df, column = "total")
-  components <- get_component_array(df, control_component)
+  tmp_df <- sort_data(df, reference_component)
+  r <- get_n_array(tmp_df, reference_component)
+  n <- get_n_array(tmp_df, reference_component, column = "total")
+  components <- get_component_array(df, reference_component)
   return(
     list(
       n_trials = n_trials,
@@ -142,7 +127,7 @@ format_data_continous <- function(
   n_trials,
   n_arms,
   n_components,
-  control_component = NULL
+  reference_component
 ) {
 
 }
@@ -158,18 +143,18 @@ get_studies <- function(df) {
 }
 
 get_n_arms <- function(df) {
-  require(dplyr)
+  `%>%` <- magrittr::`%>%`
   tmp_data <- sort_data(df)
   tmp_data <- tmp_data %>%
-    dplyr::mutate(n = n()) %>%
+    dplyr::mutate(n = dplyr::n()) %>%
     dplyr::select(study, n) %>%
-    dplyr::filter(row_number() == 1)
+    dplyr::filter(dplyr::row_number() == 1)
   return(as.numeric(tmp_data$n))
 }
 
-get_n_array <- function(df, control_component = NULL, column = "events") {
-  require(dplyr)
-  tmp_df <- sort_data(df)
+get_n_array <- function(df, reference_component, column = "events") {
+  `%>%` <- magrittr::`%>%`
+  tmp_df <- sort_data(df, reference_component)
   tmp_df <- tmp_df %>%
     dplyr::mutate(study = as.factor(study)) %>% # nolint: object_usage
     dplyr::group_by(study) %>%
@@ -177,44 +162,35 @@ get_n_array <- function(df, control_component = NULL, column = "events") {
   n_trials <- get_n_trials(tmp_df)
   max_arms <- max(get_n_arms(tmp_df))
   n_array <- array(NA, dim = c(n_trials, max_arms))
-  if (is.null(control_component)) {
-    control_component <- get_most_frequent_component(tmp_df$components)
-  }
   for (study_id in 1:max(tmp_df$study_id)){
     study <- tmp_df[tmp_df$study_id == study_id, ]
-    study_control_component <- study[study$components == control_component, ]
-    study_arms <- study[!study$components == control_component, ]
-    # Set control_component
-    n_array[study_id, 1] <- study_control_component[[column]]
-    for (arm in seq_len(nrow(study_arms))) {
-      n_array[study_id, (arm + 1)] <- study_arms[arm, ][[column]]
+    #study_arms <- study[!study$components == reference_component, ]
+    for (arm in seq_len(nrow(study))) {
+      n_array[study_id, arm] <- study[arm, ][[column]]
     }
   }
   return(n_array)
 }
 
-get_component_array <- function(df, control_component = NULL) {
-  tmp_df <- sort_data(df)
+get_component_array <- function(df, reference_component) {
+  tmp_df <- sort_data(df, reference_component)
   n_components <- get_n_components(tmp_df$components)
   n_trials <- get_n_trials(tmp_df)
   max_arms <- max(get_n_arms(tmp_df))
-  if (is.null(control_component)) {
-    control_component <- get_most_frequent_component(tmp_df$components)
-  }
-  components <- get_comps_no_control_component(tmp_df$components)
+  components <- get_components_no_ref(tmp_df$components, reference_component)
   component_array <- array(NA, dim = c(n_components, n_trials, max_arms))
-  for(component in seq_len(n_components)){
+  for (component in seq_len(n_components)){
     tmp_component <- components[component]
-    for(study_id in seq_len(max(tmp_df$study_id))) {
-      component_array[component, study_id, 1] <- 0
+    for (study_id in seq_len(max(tmp_df$study_id))) {
+      #component_array[component, study_id, 1] <- 0
       tmp_study <- tmp_df[tmp_df$study_id == study_id, ]
-      tmp_study <- tmp_study[!tmp_study$components == control_component, ]
+      #tmp_study <- tmp_study[!tmp_study$components == reference_component, ]
       for (arm in seq_len(nrow(tmp_study))) {
         tmp_study_components <- get_all_components(tmp_study[arm, ]$components)
         if (tmp_component %in% tmp_study_components) {
-          component_array[component, study_id, (arm + 1)] <- 1
+          component_array[component, study_id, (arm)] <- 1
         } else {
-          component_array[component, study_id, (arm + 1)] <- 0
+          component_array[component, study_id, (arm)] <- 0
         }
       }
     }

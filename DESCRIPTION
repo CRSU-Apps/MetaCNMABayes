@@ -15,19 +15,33 @@ Description: An R Package for conducting Bayesian Component Network Meta Analysi
 URL: https://github.com/CRSU-Apps/MetaCNMABayes
 BugReports: https://github.com/CRSU-Apps/MetaCNMABayes/issues
 Imports:
-  BH,
-  StanHeaders,
-  Rcpp,
-  RcppEigen,
-  RcppParallel,
-  inline,
-  loo,
-  pkgbuild,
-  rstan,
-  tidyr
+    BH,
+    inline,
+    loo,
+    methods,
+    pkgbuild,
+    Rcpp (>= 0.12.0),
+    RcppEigen,
+    RcppParallel (>= 5.0.1),
+    rstan (>= 2.18.1),
+    rstantools (>= 2.3.1.1),
+    StanHeaders,
+    tidyr
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Biarch: true
+Depends: 
+    R (>= 3.4.0)
+LinkingTo: 
+    BH (>= 1.66.0),
+    Rcpp (>= 0.12.0),
+    RcppEigen (>= 0.3.3.3.0),
+    RcppParallel (>= 5.0.1),
+    rstan (>= 2.18.1),
+    StanHeaders (>= 2.18.0)
+SystemRequirements: GNU make
+RoxygenNote: 7.2.3
