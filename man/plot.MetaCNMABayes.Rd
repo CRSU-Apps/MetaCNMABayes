@@ -16,6 +16,7 @@ Default plot function for MetaCNMABayes
 }
 \examples{
 \dontrun{
-plot(modelfit)
+model_fit <- fit_binary_fe(binary, "CONTROL")
+plot(model_fit)
 }
 }

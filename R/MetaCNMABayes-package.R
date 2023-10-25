@@ -1,7 +1,7 @@
 #' MetaCNMABayes: A package for conducting CNMA using STAN
 #'
-#' The MetaCNMABayes package provides three categories of important functions:
-#' foo, bar and baz.
+#' The MetaCNMABayes package provides functions for fitting
+#' and plotting CNMA models using STAN
 #'
 #' @section MetaCNMABayes functions:
 #' The MetaCNMABayes functions ...

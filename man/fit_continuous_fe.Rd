@@ -50,6 +50,6 @@ Title
 }
 \examples{
 \dontrun{
-fit_continuous_fe(df)
+fit_continuous_fe(continuous, "usual")
 }
 }

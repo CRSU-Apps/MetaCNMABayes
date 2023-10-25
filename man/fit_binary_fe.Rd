@@ -50,6 +50,6 @@ Title
 }
 \examples{
 \dontrun{
-fit_binary_fe(df)
+fit_binary_fe(binary, "CONTROL")
 }
 }

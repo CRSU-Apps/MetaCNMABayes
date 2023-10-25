@@ -105,12 +105,12 @@ static const std::vector<string> locations_array__ = {" (found before start of p
                                                       " (in 'continuous_fe', line 9, column 8 to column 16)",
                                                       " (in 'continuous_fe', line 9, column 18 to column 29)",
                                                       " (in 'continuous_fe', line 9, column 2 to column 31)",
-                                                      " (in 'continuous_fe', line 11, column 8 to column 16)",
-                                                      " (in 'continuous_fe', line 11, column 18 to column 29)",
-                                                      " (in 'continuous_fe', line 11, column 2 to column 31)",
-                                                      " (in 'continuous_fe', line 13, column 9 to column 17)",
-                                                      " (in 'continuous_fe', line 13, column 19 to column 30)",
-                                                      " (in 'continuous_fe', line 13, column 2 to column 32)",
+                                                      " (in 'continuous_fe', line 11, column 9 to column 17)",
+                                                      " (in 'continuous_fe', line 11, column 19 to column 30)",
+                                                      " (in 'continuous_fe', line 11, column 2 to column 32)",
+                                                      " (in 'continuous_fe', line 13, column 10 to column 18)",
+                                                      " (in 'continuous_fe', line 13, column 20 to column 31)",
+                                                      " (in 'continuous_fe', line 13, column 2 to column 33)",
                                                       " (in 'continuous_fe', line 15, column 18 to column 30)",
                                                       " (in 'continuous_fe', line 15, column 32 to column 40)",
                                                       " (in 'continuous_fe', line 15, column 42 to column 53)",
@@ -124,8 +124,8 @@ private:
   std::vector<int> n_arms;
   int n_components;
   std::vector<std::vector<int>> n;
-  std::vector<std::vector<int>> y;
-  std::vector<std::vector<int>> sd;
+  std::vector<std::vector<double>> y;
+  std::vector<std::vector<double>> sd;
   std::vector<std::vector<std::vector<double>>> components;
  
 public:
@@ -212,15 +212,15 @@ public:
       current_statement__ = 32;
       validate_non_negative_index("y", "max(n_arms)", max(n_arms));
       current_statement__ = 33;
-      context__.validate_dims("data initialization","y","int",
+      context__.validate_dims("data initialization","y","double",
           context__.to_vec(n_trials, max(n_arms)));
-      y = std::vector<std::vector<int>>(n_trials, std::vector<int>(max(
-                                                                    n_arms), std::numeric_limits<int>::min()));
+      y = std::vector<std::vector<double>>(n_trials, std::vector<double>(
+        max(n_arms), std::numeric_limits<double>::quiet_NaN()));
       
       {
-        std::vector<int> y_flat__;
+        std::vector<local_scalar_t__> y_flat__;
         current_statement__ = 33;
-        assign(y_flat__, nil_index_list(), context__.vals_i("y"),
+        assign(y_flat__, nil_index_list(), context__.vals_r("y"),
           "assigning variable y_flat__");
         current_statement__ = 33;
         pos__ = 1;
@@ -241,15 +241,15 @@ public:
       current_statement__ = 35;
       validate_non_negative_index("sd", "max(n_arms)", max(n_arms));
       current_statement__ = 36;
-      context__.validate_dims("data initialization","sd","int",
+      context__.validate_dims("data initialization","sd","double",
           context__.to_vec(n_trials, max(n_arms)));
-      sd = std::vector<std::vector<int>>(n_trials, std::vector<int>(max(
-                                                                    n_arms), std::numeric_limits<int>::min()));
+      sd = std::vector<std::vector<double>>(n_trials, std::vector<double>(
+        max(n_arms), std::numeric_limits<double>::quiet_NaN()));
       
       {
-        std::vector<int> sd_flat__;
+        std::vector<local_scalar_t__> sd_flat__;
         current_statement__ = 36;
-        assign(sd_flat__, nil_index_list(), context__.vals_i("sd"),
+        assign(sd_flat__, nil_index_list(), context__.vals_r("sd"),
           "assigning variable sd_flat__");
         current_statement__ = 36;
         pos__ = 1;

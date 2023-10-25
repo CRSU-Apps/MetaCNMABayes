@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' fit_binary_fe(df)
+#' fit_binary_fe(binary, "CONTROL")
 #' }
 fit_binary_fe <- function(
   data,

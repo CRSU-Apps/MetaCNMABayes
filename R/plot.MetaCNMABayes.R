@@ -8,7 +8,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' plot(modelfit)
+#' model_fit <- fit_binary_fe(binary, "CONTROL")
+#' plot(model_fit)
 #' }
 plot.MetaCNMABayes <- function(obj, ...) {
   if (class(obj) != "MetaCNMABayes") {
