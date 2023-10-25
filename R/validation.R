@@ -5,7 +5,7 @@ required_binary_columns <- c(
   "Total"
 )
 
-required_continous_columns <- c(
+required_continuous_columns <- c(
   "Study",
   "Components",
   "Mean",
@@ -18,8 +18,8 @@ validate_columns <- function(df, data_type) {
   column_names <- names(df)
   if (data_type == "binary")  {
     required_columns <- required_binary_columns
-  } else if (data_type == "continous") {
-    required_columns <- required_continous_columns
+  } else if (data_type == "continuous") {
+    required_columns <- required_continuous_columns
   } else {
     stop("An internal error occurred")
   }

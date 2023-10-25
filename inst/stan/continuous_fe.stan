@@ -8,9 +8,9 @@ data {
   // number of patients per arm (n)
   int n[n_trials, max(n_arms)];
   // means per arm
-  int y[n_trials, max(n_arms)];
+  real y[n_trials, max(n_arms)];
   // SDs per arm
-  int sd[n_trials, max(n_arms)];
+  real sd[n_trials, max(n_arms)];
   // Component Array
   real components[n_components, n_trials, max(n_arms)];
   //vector[max(n_arms)] components[n_components, n_trials];
@@ -38,9 +38,9 @@ model {
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
     for (k in 1:n_arms[i]){
-      prec[i,k] = n[i,k]/pow(sd[i,k],2);
+      //prec[i,k] = n[i,k]/pow(sd[i,k],2);
       theta[i,k] = mu[i] + (D * to_vector(components[,i,k]));
-      y[i,k] ~ normal(theta[i,k],prec[i,k]);
+      y[i,k] ~ normal(theta[i,k],sd[i,k]);
     }
   }
 

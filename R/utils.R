@@ -129,7 +129,22 @@ format_data_continous <- function(
   n_components,
   reference_component
 ) {
-
+  tmp_df <- sort_data(df, reference_component)
+  n <- get_n_array(tmp_df, reference_component, column = "total")
+  y <- get_n_array(tmp_df, reference_component, column = "mean")
+  sd <- get_n_array(tmp_df, reference_component, column = "sd")
+  components <- get_component_array(df, reference_component)
+  return(
+    list(
+      n_trials = n_trials,
+      n_arms = n_arms,
+      n_components = n_components,
+      n = n,
+      y = y,
+      sd = sd,
+      components = components
+    )
+  )
 }
 
 get_n_trials <- function(df) {

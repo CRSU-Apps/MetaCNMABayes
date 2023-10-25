@@ -53,3 +53,7 @@ inst/models/*.rds
 
 # Mac
 .DS_Store
+
+# DLLs
+src/*.o
+src/*.so

@@ -21,12 +21,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' fit_binary_fe(df)
+#' fit_continuous_fe(df)
 #' }
-fit_binary_fe <- function(
+fit_continuous_fe <- function(
   data,
   reference_component,
-  outcome = "OR",
+  outcome = "MD",
   chains = 3,
   warmup = 500,
   iter = 1500,
@@ -38,8 +38,8 @@ fit_binary_fe <- function(
   if (! "study" %in% tolower(names(data))) {
     stop("The column study is missing from the data")
   }
-  if (! outcome == "OR" | outcome == "RR") {
-    stop("Outcome must be OR or RR")
+  if (! outcome == "MD") {
+    stop("Only mean difference is currently supported")
   }
   if (missing(reference_component)) {
     stop("Reference Component cannot be missing")
@@ -49,8 +49,8 @@ fit_binary_fe <- function(
       data,
       reference_component,
       outcome,
-      model = stanmodels$binary_fe,
-      data_type = "binary",
+      model = stanmodels$continuous_fe,
+      data_type = "continuous",
       chains = 3,
       warmup = 500,
       iter = 1500,
