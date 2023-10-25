@@ -53,6 +53,14 @@ meta_forest_plot <- function(
     ticks <- args[["ticks"]]
   }
 
+  if (hasArg(digits)) {
+    digits <- args[["digits"]]
+  } else if (round(min(abs(stan_summary$mean)), 2) == 0) {
+    digits <- 3L
+  } else {
+    digits <- 2L
+  }
+
   if (!hasArg(transform_function)) {
     transform_function <- function(x) {
       x
@@ -73,7 +81,8 @@ meta_forest_plot <- function(
     at = ticks,
     psize = c(rep(1, length(components))),
     cex = 0.9,
-    header = c("Component", paste0(outcome_measure, " (95% CrI)"))
+    header = c("Component", paste0(outcome_measure, " (95% CrI)")),
+    digits = digits
   )
 }
 
@@ -137,8 +146,8 @@ get_xlim <- function(
   binary = FALSE
 ) {
 
-  lci <- min(stan_summary$`2.5%`)
-  uci <- max(stan_summary$`97.5%`)
+  lci <- round(min(stan_summary$`2.5%`), 0)
+  uci <- round(max(stan_summary$`97.5%`), 0)
 
   x_min <-  ifelse(binary, exp(lci) - 1, lci - 1)
   x_max <-  ifelse(binary, exp(uci) - 1, uci + 1)
