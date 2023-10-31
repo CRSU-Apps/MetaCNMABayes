@@ -1,3 +1,5 @@
+# Internal function for fitting a given stan model
+# with given data based on outcome
 fit_model <- function(
   data,
   reference_component,
@@ -5,8 +7,8 @@ fit_model <- function(
   model,
   data_type,
   chains = 3,
-  warmup = 500,
-  iter = 1500,
+  warmup = 1000,
+  iter = 3000,
   seed = 12345,
   max_treedepth = 10,
   adapt_delta = 0.95,

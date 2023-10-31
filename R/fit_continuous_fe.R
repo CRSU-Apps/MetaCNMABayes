@@ -1,4 +1,6 @@
-#' Title
+#' fit_continous_fe
+#'
+#' Function for fitting a continuous fixed effects CNMA Model using Stan
 #'
 #' @param data a dataframe containing the required columns see details.
 #' @param reference_component a character specifying
@@ -28,8 +30,8 @@ fit_continuous_fe <- function(
   reference_component,
   outcome = "MD",
   chains = 3,
-  warmup = 500,
-  iter = 1500,
+  warmup = 1000,
+  iter = 3000,
   seed = 12345,
   max_treedepth = 10,
   adapt_delta = 0.95,
@@ -51,13 +53,13 @@ fit_continuous_fe <- function(
       outcome,
       model = stanmodels$continuous_fe,
       data_type = "continuous",
-      chains = 3,
-      warmup = 500,
-      iter = 1500,
-      seed = 12345,
-      max_treedepth = 10,
-      adapt_delta = 0.95,
-      stepsize = 0.01
+      chains = chains,
+      warmup = warmup,
+      iter = iter,
+      seed = seed,
+      max_treedepth = max_treedepth,
+      adapt_delta = adapt_delta,
+      stepsize = stepsize
     )
   )
 }

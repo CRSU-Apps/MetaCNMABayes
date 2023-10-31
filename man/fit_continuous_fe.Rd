@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_continuous_fe.R
 \name{fit_continuous_fe}
 \alias{fit_continuous_fe}
-\title{Title}
+\title{fit_continous_fe}
 \usage{
 fit_continuous_fe(
   data,
@@ -46,7 +46,7 @@ The Default is 12345}
 A fitted stan model of class MetaCNMABayes
 }
 \description{
-Title
+Function for fitting a continuous fixed effects CNMA Model using Stan
 }
 \examples{
 \dontrun{

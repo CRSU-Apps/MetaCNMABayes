@@ -1,3 +1,4 @@
+# Vector of required binary columns
 required_binary_columns <- c(
   "Study",
   "Components",
@@ -5,6 +6,7 @@ required_binary_columns <- c(
   "Total"
 )
 
+# Vector of required continuous columns
 required_continuous_columns <- c(
   "Study",
   "Components",
@@ -13,6 +15,8 @@ required_continuous_columns <- c(
   "Total"
 )
 
+# Internal function to validate the required columns
+# are present in the given dataset
 validate_columns <- function(df, data_type) {
   required_columns <- NULL
   column_names <- names(df)

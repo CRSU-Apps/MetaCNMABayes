@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_binary_fe.R
 \name{fit_binary_fe}
 \alias{fit_binary_fe}
-\title{Title}
+\title{fit_binary_fe}
 \usage{
 fit_binary_fe(
   data,
@@ -46,7 +46,7 @@ The Default is 12345}
 A fitted stan model of class MetaCNMABayes
 }
 \description{
-Title
+Function for fitting a binary fixed effects CNMA Model using STAN
 }
 \examples{
 \dontrun{
