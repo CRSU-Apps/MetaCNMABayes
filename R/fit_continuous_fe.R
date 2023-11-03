@@ -1,4 +1,4 @@
-#' fit_continous_fe
+#' fit_continuous_fe
 #'
 #' Function for fitting a continuous fixed effects CNMA Model using Stan
 #'

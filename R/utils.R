@@ -85,7 +85,7 @@ format_data <- function(df, data_type, reference_component) {
       reference_component
     ))
   } else {
-    return(format_data_continous(
+    return(format_data_continuous(
       df,
       n_trials,
       n_arms,
@@ -120,9 +120,9 @@ format_data_binary <- function(
   )
 }
 
-# Internal function to return continous data
+# Internal function to return continuous data
 # formatted for STAN
-format_data_continous <- function(
+format_data_continuous <- function(
   df,
   n_trials,
   n_arms,

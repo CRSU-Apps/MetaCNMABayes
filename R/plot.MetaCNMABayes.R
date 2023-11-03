@@ -18,7 +18,7 @@ plot.MetaCNMABayes <- function(obj, ...) {
   if (obj$data_type == "binary") {
     binary_forest_plot(obj, ...)
   } else if (obj$data_type == "continuous") {
-    continous_forest_plot(obj, ...)
+    continuous_forest_plot(obj, ...)
   } else {
     print("Unknown data type")
   }
@@ -115,7 +115,7 @@ binary_forest_plot <- function(
   )
 }
 
-continous_forest_plot <- function(
+continuous_forest_plot <- function(
   obj,
   ...
 ) {

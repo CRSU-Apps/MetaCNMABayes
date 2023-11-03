@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_continuous_fe.R
 \name{fit_continuous_fe}
 \alias{fit_continuous_fe}
-\title{fit_continous_fe}
+\title{fit_continuous_fe}
 \usage{
 fit_continuous_fe(
   data,
