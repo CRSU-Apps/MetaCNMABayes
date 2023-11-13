@@ -5,7 +5,17 @@ authors:
   given-names: Ryan
   affiliation: University of Glasgow
   orcid: https://orcid.org/0000-0002-4424-9890
-date-released: 2023-07-20
+- family-names: Freeman
+  given-names: Suzanne
+  affiliation: University of Leicester
+  orcid: https://orcid.org/0000-0001-8045-4405
+- family-names: Smith
+  given-names: Ellesha
+  affiliation: University of Leicester
+- family-names: Morris
+  given-names: Tom
+  affiliation: University of Leicester
+date-released: 2023-11-13
 keywords:
 - Component Network Meta Analysis
 - CNMA

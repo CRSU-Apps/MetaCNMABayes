@@ -50,6 +50,23 @@ get_single_components <- function(components_column) {
   tmp_components <- tmp_components[!grepl("\\+", tmp_components)]
 }
 
+is_reference_single <- function(df, reference_component) {
+  tmp_df <- sort_data(df, reference_component)
+  single_components <- get_single_components(tmp_df$components)
+  n_reference_components <- 0
+  min_reference_components <- get_n_trials(tmp_df)
+  for (component in single_components) {
+    if (component == reference_component) {
+      n_reference_components <- n_reference_components + 1
+    }
+  }
+  if (n_reference_components == min_reference_components) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
 # Internal function to return the number of
 # unique components excluding the reference
 get_n_components <- function(components_column) {
