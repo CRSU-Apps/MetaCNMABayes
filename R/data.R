@@ -31,14 +31,14 @@
 #' A continuous dataset for CNMA of mean length of stay in long format
 #'
 #' Data derived from (with permision)
-#' 
+#'
 #' Powell, R., Scott, N. W., Freeman, S. C., Sutton, A. J., Cooper,
 #' N. J., Manyande, A., Bruce, J., Vögele, C., Byrne-Davis, L. M.,
 #' Unsworth, M., Osmer, C., & Johnston, M. (2023).
 #' Dataset: Psychological preparation and postoperative outcomes for
 #' adults undergoing surgery under general anaesthesia [Data set].
 #' Zenodo. \url{https://doi.org/10.5281/zenodo.8006703}
-#' 
+#'
 #' Originally from
 #'
 #' Nicky J. Welton, D. M. Caldwell, E. Adamopoulos, K. Vedhara,
