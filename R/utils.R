@@ -50,6 +50,8 @@ get_single_components <- function(components_column) {
   tmp_components <- tmp_components[!grepl("\\+", tmp_components)]
 }
 
+# Internal function to check if the reference component
+# is the only component in it's arm
 is_reference_single <- function(df, reference_component) {
   tmp_df <- sort_data(df, reference_component)
   single_components <- get_single_components(tmp_df$components)
@@ -73,9 +75,33 @@ get_n_components <- function(components_column) {
   length(get_unique_components(components_column)) - 1
 }
 
+# Function to reorder data
+reorder_data <- function(df, reference_component) {
+  tmp_df_ref <- data.frame()
+  tmp_df_no_ref <- data.frame()
+
+  for (row_i in seq_len(nrow(df))) {
+    tmp_row <- df[row_i,]
+    row_components <- get_all_components(tmp_row$components)
+    if (
+      reference_component %in% row_components && length(row_components) == 1
+    ) {
+      tmp_df_ref <- rbind(tmp_df_ref, tmp_row)
+    } else {
+      tmp_df_no_ref <- rbind(tmp_df_no_ref, tmp_row)
+    }
+  }
+
+  tmp_df <- rbind(tmp_df_ref, tmp_df_no_ref)
+  return(tmp_df)
+}
+
 # Internal function to group and sort the data
 sort_data <- function(df, reference_component) {
   `%>%` <- magrittr::`%>%`
+  if (!missing(reference_component)) {
+    df <- reorder_data(df, reference_component)
+  }
   tmp_df <- df
   names(tmp_df) <- tolower(names(tmp_df))
   tmp_df <- tmp_df %>%
