@@ -219,7 +219,7 @@ get_n_array <- function(df, reference_component, column = "events") {
   tmp_df <- sort_data(df, reference_component)
   n_trials <- get_n_trials(tmp_df, reference_component)
   max_arms <- max(get_n_arms(tmp_df, reference_component))
-  n_array <- array(NA, dim = c(n_trials, max_arms))
+  n_array <- array(1, dim = c(n_trials, max_arms))
   for (study_id in 1:max(tmp_df$study_id)){
     study <- tmp_df[tmp_df$study_id == study_id, ]
     for (arm in seq_len(nrow(study))) {
@@ -237,7 +237,7 @@ get_component_array <- function(df, reference_component) {
   n_trials <- get_n_trials(tmp_df, reference_component)
   max_arms <- max(get_n_arms(tmp_df, reference_component))
   components <- get_components_no_ref(tmp_df$components, reference_component)
-  component_array <- array(NA, dim = c(n_components, n_trials, max_arms))
+  component_array <- array(0, dim = c(n_components, n_trials, max_arms))
   for (component in seq_len(n_components)){
     tmp_component <- components[component]
     for (study_id in seq_len(max(tmp_df$study_id))) {

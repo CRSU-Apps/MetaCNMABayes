@@ -19,13 +19,15 @@ parameters {
   vector [n_trials] mu;
   vector[n_components] d;
 }
+transformed parameters {
+  // Define prior for between trial sd
+  real<lower=0, upper=10> sdbt;
+}
 model {
   // Define linear Prdictor
   vector [max(n_arms)] theta[n_trials];
   // Define Precision
   vector [max(n_arms)] prec[n_trials];
-  // Define prior for between trial sd
-  real sdbt;
   // Define mean treatment effect distribution with multi-arm corrections vector
   vector [max(n_arms)] md[n_trials];
   // Define vector trial specific treatment effect vector
@@ -38,6 +40,8 @@ model {
   vector [max(n_arms)] sw[n_trials];
   // Define Tempory vector (to set control to 0)
   row_vector [n_components]D;
+
+  sdbt ~ uniform(0, 10);
   
   for(i in 1:(n_components)){
     D[i] = d[i];
@@ -46,8 +50,6 @@ model {
   for(i in 1:(n_components)){
     d[i] ~ normal(0, 1000);
   }
-  
-  sdbt ~ uniform(0, 10);
   
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
