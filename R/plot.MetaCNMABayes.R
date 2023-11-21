@@ -153,8 +153,8 @@ get_xlim <- function(
   x_min <-  ifelse(binary, exp(lci) - 1, lci - 1)
   x_max <-  ifelse(binary, exp(uci) - 1, uci + 1)
 
-  if (x_min < -5) {
-    x_min <- -5
+  if (x_min < -10) {
+    x_min <- -10
   }
 
   if (x_max > 10) {
