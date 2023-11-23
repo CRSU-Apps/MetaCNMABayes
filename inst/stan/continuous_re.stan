@@ -17,57 +17,63 @@ data {
 }
 parameters {
   vector [n_trials] mu;
-  vector[n_components] d;
+
+  row_vector [n_components] d;
+
+  // Define prior for between trial sd
+
+  real<lower=0, upper=10> sdbt;
+
+  vector [max(n_arms)] delta[n_trials];
 }
 transformed parameters {
-  // Define prior for between trial sd
-  real<lower=0, upper=10> sdbt;
-}
-model {
-  // Define linear Prdictor
-  vector [max(n_arms)] theta[n_trials];
-  // Define Precision
-  vector [max(n_arms)] prec[n_trials];
-  // Define mean treatment effect distribution with multi-arm corrections vector
-  vector [max(n_arms)] md[n_trials];
-  // Define vector trial specific treatment effect vector
-  vector [max(n_arms)] delta[n_trials];
-  // Define vector for between trial sd
-  vector [max(n_arms)] taud[n_trials];
-  // Define vector for between trial adjustment
   vector [max(n_arms)] w[n_trials];
-  // Define vector for between trial cumulative adjustment
   vector [max(n_arms)] sw[n_trials];
-  // Define Tempory vector (to set control to 0)
-  row_vector [n_components]D;
+  vector [max(n_arms)] md[n_trials];
+  vector [max(n_arms)] taud[n_trials];
+  vector [max(n_arms)] r_delta[n_trials];
 
-  sdbt ~ uniform(0, 10);
-  
-  for(i in 1:(n_components)){
-    D[i] = d[i];
-  }
-  
-  for(i in 1:(n_components)){
-    d[i] ~ normal(0, 1000);
-  }
-  
   for (i in 1:n_trials) {
-    mu[i] ~ normal(0, 1000);
-    delta[i,1] = 0;
-    w[i,1] = 0;
-    
+    w[i, 1] = 0;
+    r_delta[i, 1] = 0;
+    sw[i,1] = 0;
+    md[i,1] = 0;
+    taud[i,1] = 0;
     for (k in 2:n_arms[i]) {
       taud[i,k] = sdbt * 2 * (k-1) / k;
-      md[i,k] = (D * to_vector(components[,i,k])) - (D * to_vector(components[,i,1])) + sw[i,k];
+      w[i,k] = delta[i,k] - (d * to_vector(components[,i,k])) + (d * to_vector(components[,i,1]));
+      sw[i,k] = sum(w[i,1:k-1]) / (k-1);
+      md[i,k] = (d * to_vector(components[,i,k])) - (d * to_vector(components[,i,1])) + sw[i,k];
+      r_delta[i,k] = delta[i,k];
+    }
+    for (k in (n_arms[i]+1):max(n_arms)) {
+      w[i,k] = 0;
+      sw[i,k] = 0;
+      md[i,k] = 0;
+      taud[i,k] = 0;
+      r_delta[i,k] = 0;
+    }
+
+  }
+  
+}
+model {
+  vector [max(n_arms)] theta[n_trials];
+  sdbt ~ uniform(0,10);
+
+  for (i in 1:n_trials) {
+    mu[i] ~ normal(0, 1000);
+    delta[i] ~ normal(0, 1000);
+
+    for (k in 2:n_arms[i]) {
       delta[i,k] ~ normal(md[i,k], taud[i,k]);
-      w[i,k] = delta[i,k] - (D * to_vector(components[,i,k])) + (D * to_vector(components[,i,1]));
-      sw[i,k] = sum(w[i,k:k-1]) / (k-1);
     }
-    
+
     for (k in 1:n_arms[i]){
-      theta[i,k] = mu[i] + delta[i,k];
-      y[i,k] ~ normal(theta[i,k],sd[i,k]);
+      theta[i,k] = mu[i] + r_delta[i,k];
+      y[i,k] ~ normal(theta[i,k], ( sd[i,k] / sqrt(n[i,k]) ) );
     }
+
   }
   
 }
