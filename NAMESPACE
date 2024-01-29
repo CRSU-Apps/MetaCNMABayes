@@ -3,6 +3,7 @@
 S3method(plot,MetaCNMABayes)
 S3method(summary,MetaCNMABayes)
 export(fit_binary_fe)
+export(fit_binary_re)
 export(fit_continuous_fe)
 export(fit_continuous_re)
 import(Rcpp)
