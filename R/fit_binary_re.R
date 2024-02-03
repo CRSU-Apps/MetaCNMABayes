@@ -1,6 +1,6 @@
-#' fit_continuous_fe
+#' fit_binary_re
 #'
-#' Function for fitting a continuous fixed effects CNMA Model using Stan
+#' Function for fitting a binary random effects CNMA Model using STAN
 #'
 #' @param data a dataframe containing the required columns see details.
 #' @param reference_component a character specifying
@@ -23,12 +23,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' fit_continuous_fe(continuous, "Usual Care")
+#' fit_binary_re(binary, "CONTROL")
 #' }
-fit_continuous_fe <- function(
+fit_binary_re <- function(
   data,
   reference_component,
-  outcome = "MD",
+  outcome = "OR",
   chains = 3,
   warmup = 1000,
   iter = 3000,
@@ -40,8 +40,8 @@ fit_continuous_fe <- function(
   if (! "study" %in% tolower(names(data))) {
     stop("The column study is missing from the data")
   }
-  if (! outcome == "MD") {
-    stop("Only mean difference is currently supported")
+  if (! outcome == "OR" | outcome == "RR") {
+    stop("Outcome must be OR or RR")
   }
   if (missing(reference_component)) {
     stop("Reference Component cannot be missing")
@@ -51,8 +51,8 @@ fit_continuous_fe <- function(
       data,
       reference_component,
       outcome,
-      model = stanmodels$continuous_fe,
-      data_type = "continuous",
+      model = stanmodels$binary_re,
+      data_type = "binary",
       chains = chains,
       warmup = warmup,
       iter = iter,

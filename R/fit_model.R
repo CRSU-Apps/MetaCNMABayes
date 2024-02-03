@@ -20,6 +20,12 @@ fit_model <- function(
   }
   validate_columns(df, data_type)
 
+  if (!is_reference_single(df, reference_component)) {
+    #stop("Currently, only studies where no other
+    #component is present in the arm containing the reference
+    #component is supported.")
+  }
+
   rstan::rstan_options(auto_write = TRUE) # Cache compiled Stan programs
   options(mc.cores = parallel::detectCores()) # Parallelize chains
 

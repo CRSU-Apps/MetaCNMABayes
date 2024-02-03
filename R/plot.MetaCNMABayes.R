@@ -18,7 +18,7 @@ plot.MetaCNMABayes <- function(obj, ...) {
   if (obj$data_type == "binary") {
     binary_forest_plot(obj, ...)
   } else if (obj$data_type == "continuous") {
-    continous_forest_plot(obj, ...)
+    continuous_forest_plot(obj, ...)
   } else {
     print("Unknown data type")
   }
@@ -115,7 +115,7 @@ binary_forest_plot <- function(
   )
 }
 
-continous_forest_plot <- function(
+continuous_forest_plot <- function(
   obj,
   ...
 ) {
@@ -153,8 +153,8 @@ get_xlim <- function(
   x_min <-  ifelse(binary, exp(lci) - 1, lci - 1)
   x_max <-  ifelse(binary, exp(uci) - 1, uci + 1)
 
-  if (x_min < -5) {
-    x_min <- -5
+  if (x_min < -10) {
+    x_min <- -10
   }
 
   if (x_max > 10) {

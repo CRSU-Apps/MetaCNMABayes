@@ -40,7 +40,7 @@ model {
     for (k in 1:n_arms[i]){
       //prec[i,k] = n[i,k]/pow(sd[i,k],2);
       theta[i,k] = mu[i] + (D * to_vector(components[,i,k]));
-      y[i,k] ~ normal(theta[i,k],sd[i,k]);
+      y[i,k] ~ normal(theta[i,k], ( sd[i,k] / sqrt(n[i,k]) ) );
     }
   }
 

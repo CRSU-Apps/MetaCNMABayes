@@ -1,4 +1,4 @@
-#' fit_continuous_fe
+#' fit_continuous_re
 #'
 #' Function for fitting a continuous fixed effects CNMA Model using Stan
 #'
@@ -23,9 +23,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' fit_continuous_fe(continuous, "Usual Care")
+#' fit_continuous_re(continuous, "Usual Care")
 #' }
-fit_continuous_fe <- function(
+fit_continuous_re <- function(
   data,
   reference_component,
   outcome = "MD",
@@ -51,7 +51,7 @@ fit_continuous_fe <- function(
       data,
       reference_component,
       outcome,
-      model = stanmodels$continuous_fe,
+      model = stanmodels$continuous_re,
       data_type = "continuous",
       chains = chains,
       warmup = warmup,

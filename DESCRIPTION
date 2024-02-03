@@ -7,6 +7,8 @@ Authors@R: c(
           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4424-9890")),
           person("Suzanne", "Freeman", email = "suzanne.freeman@leicester.ac.uk",
           role = "aut", comment = c(ORCID = "0000-0001-8045-4405")),
+          person("Ellesha", "Smith", email = "eas24@leicester.ac.uk",
+          role = "aut"),
           person("Tom", "Morris", email = "tm428@leicester.ac.uk",
           role = "aut")
           )
@@ -44,4 +46,4 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 SystemRequirements: GNU make
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0

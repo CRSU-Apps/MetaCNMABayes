@@ -50,15 +50,59 @@ get_single_components <- function(components_column) {
   tmp_components <- tmp_components[!grepl("\\+", tmp_components)]
 }
 
+# Internal function to check if the reference component
+# is the only component in it's arm
+is_reference_single <- function(df, reference_component) {
+  tmp_df <- sort_data(df, reference_component)
+  single_components <- get_single_components(tmp_df$components)
+  n_reference_components <- 0
+  min_reference_components <- get_n_trials(tmp_df)
+  for (component in single_components) {
+    if (component == reference_component) {
+      n_reference_components <- n_reference_components + 1
+    }
+  }
+  if (n_reference_components == min_reference_components) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
 # Internal function to return the number of
 # unique components excluding the reference
 get_n_components <- function(components_column) {
   length(get_unique_components(components_column)) - 1
 }
 
+# Function to reorder data
+reorder_data <- function(df, reference_component) {
+  names(df) <- tolower(names(df))
+  tmp_df_ref <- data.frame()
+  tmp_df_no_ref <- data.frame()
+
+  for (row_i in seq_len(nrow(df))) {
+    tmp_row <- df[row_i,]
+    row_components <- get_all_components(tmp_row$components)
+    if (
+      reference_component %in% row_components && length(row_components) == 1
+    ) {
+      tmp_df_ref <- rbind(tmp_df_ref, tmp_row)
+    } else {
+      tmp_df_no_ref <- rbind(tmp_df_no_ref, tmp_row)
+    }
+  }
+
+  tmp_df <- rbind(tmp_df_ref, tmp_df_no_ref)
+  return(tmp_df)
+}
+
 # Internal function to group and sort the data
 sort_data <- function(df, reference_component) {
   `%>%` <- magrittr::`%>%`
+  if (!missing(reference_component)) {
+    df <- reorder_data(df, reference_component)
+  }
   tmp_df <- df
   names(tmp_df) <- tolower(names(tmp_df))
   tmp_df <- tmp_df %>%
@@ -73,7 +117,7 @@ sort_data <- function(df, reference_component) {
 # Internal function to return the data
 # formatted for STAN
 format_data <- function(df, data_type, reference_component) {
-  df <- sort_data(df)
+  df <- sort_data(df, reference_component)
   n_trials <- get_n_trials(df)
   n_arms <- get_n_arms(df)
   n_components <- get_n_components(df$components)
@@ -85,7 +129,7 @@ format_data <- function(df, data_type, reference_component) {
       reference_component
     ))
   } else {
-    return(format_data_continous(
+    return(format_data_continuous(
       df,
       n_trials,
       n_arms,
@@ -104,7 +148,7 @@ format_data_binary <- function(
   n_components,
   reference_component
 ) {
-  tmp_df <- sort_data(df)
+  tmp_df <- sort_data(df, reference_component)
   r <- get_n_array(tmp_df, reference_component)
   n <- get_n_array(tmp_df, reference_component, column = "total")
   components <- get_component_array(df, reference_component)
@@ -120,16 +164,16 @@ format_data_binary <- function(
   )
 }
 
-# Internal function to return continous data
+# Internal function to return continuous data
 # formatted for STAN
-format_data_continous <- function(
+format_data_continuous <- function(
   df,
   n_trials,
   n_arms,
   n_components,
   reference_component
 ) {
-  tmp_df <- sort_data(df)
+  tmp_df <- sort_data(df, reference_component)
   n <- get_n_array(tmp_df, reference_component, column = "total")
   y <- get_n_array(tmp_df, reference_component, column = "mean")
   sd <- get_n_array(tmp_df, reference_component, column = "sd")
@@ -148,21 +192,21 @@ format_data_continous <- function(
 }
 
 # Internal function to return the number of trials
-get_n_trials <- function(df) {
-  tmp_df <- sort_data(df)
+get_n_trials <- function(df, reference_component) {
+  tmp_df <- sort_data(df, reference_component)
   return(length(levels(as.factor(tmp_df$study))))
 }
 
 # Internal function to get a vecotor of the study names
-get_studies <- function(df) {
-  tmp_df <- sort_data(df)
+get_studies <- function(df, reference_component) {
+  tmp_df <- sort_data(df, reference_component)
   return(levels(tmp_df$study))
 }
 
 # Internal function to get the number of arms per study
-get_n_arms <- function(df) {
+get_n_arms <- function(df, reference_component) {
   `%>%` <- magrittr::`%>%`
-  tmp_data <- sort_data(df)
+  tmp_data <- sort_data(df, reference_component)
   tmp_data <- tmp_data %>%
     dplyr::select(study, arm) %>%
     dplyr::filter(arm == max(arm))
@@ -172,10 +216,10 @@ get_n_arms <- function(df) {
 # Internal function to get an array of formatted
 # data for a given column to be passed to STAN
 get_n_array <- function(df, reference_component, column = "events") {
-  tmp_df <- sort_data(df)
-  n_trials <- get_n_trials(tmp_df)
-  max_arms <- max(get_n_arms(tmp_df))
-  n_array <- array(NA, dim = c(n_trials, max_arms))
+  tmp_df <- sort_data(df, reference_component)
+  n_trials <- get_n_trials(tmp_df, reference_component)
+  max_arms <- max(get_n_arms(tmp_df, reference_component))
+  n_array <- array(1, dim = c(n_trials, max_arms))
   for (study_id in 1:max(tmp_df$study_id)){
     study <- tmp_df[tmp_df$study_id == study_id, ]
     for (arm in seq_len(nrow(study))) {
@@ -188,12 +232,12 @@ get_n_array <- function(df, reference_component, column = "events") {
 # Internal function to get an array of formatted
 # data for components in a study to be passed to STAN
 get_component_array <- function(df, reference_component) {
-  tmp_df <- sort_data(df)
+  tmp_df <- sort_data(df, reference_component)
   n_components <- get_n_components(tmp_df$components)
-  n_trials <- get_n_trials(tmp_df)
-  max_arms <- max(get_n_arms(tmp_df))
+  n_trials <- get_n_trials(tmp_df, reference_component)
+  max_arms <- max(get_n_arms(tmp_df, reference_component))
   components <- get_components_no_ref(tmp_df$components, reference_component)
-  component_array <- array(NA, dim = c(n_components, n_trials, max_arms))
+  component_array <- array(0, dim = c(n_components, n_trials, max_arms))
   for (component in seq_len(n_components)){
     tmp_component <- components[component]
     for (study_id in seq_len(max(tmp_df$study_id))) {
