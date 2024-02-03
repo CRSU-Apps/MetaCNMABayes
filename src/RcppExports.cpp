@@ -13,11 +13,13 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 
 RcppExport SEXP _rcpp_module_boot_stan_fit4binary_fe_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4binary_re_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4continuous_fe_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4continuous_re_mod();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_stan_fit4binary_fe_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4binary_fe_mod, 0},
+    {"_rcpp_module_boot_stan_fit4binary_re_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4binary_re_mod, 0},
     {"_rcpp_module_boot_stan_fit4continuous_fe_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4continuous_fe_mod, 0},
     {"_rcpp_module_boot_stan_fit4continuous_re_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4continuous_re_mod, 0},
     {NULL, NULL, 0}
