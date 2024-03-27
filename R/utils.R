@@ -19,6 +19,7 @@ get_all_components <- function(components_column) {
   components <- levels(as.factor(components_column))
   components <- paste(components, collapse = "+")
   components <- strsplit(components, "\\+")[[1]]
+  components <- trimws(components)
   # Convert to factor (for speed)
   components <- as.factor(components)
   return(components)
