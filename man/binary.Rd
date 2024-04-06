@@ -3,10 +3,10 @@
 \docType{data}
 \name{binary}
 \alias{binary}
-\title{Delirium Dataset}
+\title{Linde2016 Dataset}
 \format{
 ## `binary`
-A data frame with 28 rows and 4 columns:
+A data frame with 201 rows and 4 columns:
 \describe{
   \item{Study}{Unique study identifier: author, year}
   \item{Events}{Number of events per arm}
@@ -19,23 +19,31 @@ A data frame with 28 rows and 4 columns:
 binary
 }
 \description{
-A Binary Dataset for CNMA of Incidence of Delirium in long format
+A Binary Dataset for CNMA of response after treatment in long format
 }
 \details{
-Derived from (with permision)
-Burton JK, Craig L, Yong SQ, Siddiqi N,
-Teale EA, Woodhouse R, Barugh AJ, Shepherd AM,
-Brunton A, Freeman SC, Sutton AJ, Quinn TJ.
-Non‐pharmacological interventions for preventing delirium in
-hospitalised non‐ICU patients.
-Cochrane Database of Systematic Reviews 2021,
-Issue 11. Art. No.: CD013307.
+Derived (modified) from
+Balduzzi S, Rücker G, Nikolakopoulou A, Papakonstantinou T,
+Salanti G, Efthimiou O, Schwarzer G (2023):
+netmeta: An R package for network meta-analysis using frequentist methods.
+Journal of Statistical Software, 106, 1-40
 DOI:\url{https://doi.org/10.1002/14651858.CD013307.pub3}
+Under GPL-2.0 License
+Modified Date: 06/04/2024
+
+Originally from
+
+Klaus Linde, Gerta Rücker, Antonius Schneider, Levente Kriston,
+Questionable assumptions hampered interpretation of a network meta-analysis
+of primary care depression treatments,
+Journal of Clinical Epidemiology, Volume 71, 2016, Pages 86-96,
+ISSN 0895-4356,
+DOI:\url{https://doi.org/10.1016/j.jclinepi.2015.10.010}
 }
 \references{
-\url{https://doi.org/10.1002/14651858.CD013307.pub3}
+\url{https://doi.org/10.18637/jss.v106.i02}
 }
 \author{
-Burton JK et al. \email{jenni.burton@glasgow.ac.uk}
+Balduzzi S et al. \email{balduzzi@imbi.uni-freiburg.de}
 }
 \keyword{datasets}
