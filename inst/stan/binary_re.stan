@@ -42,6 +42,7 @@ transformed parameters {
       md[i,k] = (d * to_vector(components[,i,k])) - (d * to_vector(components[,i,1])) + sw[i,k];
       r_delta[i,k] = delta[i,k];
     }
+    // Fill in missing values
     for (k in (n_arms[i]+1):max(n_arms)) {
       w[i,k] = 0;
       sw[i,k] = 0;
@@ -57,6 +58,10 @@ model {
   vector [max(n_arms)] p[n_trials];
   sdbt ~ uniform(0,10);
 
+  for (i in 1:(n_components)) {
+    d[i] ~ normal(0, 1000);
+  }
+
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
     delta[i] ~ normal(0, 1000);
@@ -65,10 +70,14 @@ model {
       delta[i,k] ~ normal(md[i,k], taud[i,k]);
     }
 
+    // Ensure P for missing data is 0
+    for (k in (n_arms[i]+1):max(n_arms)) {
+      p[i,k] = 0;
+    }
+
     for (k in 1:n_arms[i]){
       p[i,k] = mu[i] + r_delta[i, k];
       r[i,k] ~ binomial_logit(n[i,k], p[i,k]);
-
     }
   
   }

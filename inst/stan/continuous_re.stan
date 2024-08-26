@@ -46,6 +46,7 @@ transformed parameters {
       md[i,k] = (d * to_vector(components[,i,k])) - (d * to_vector(components[,i,1])) + sw[i,k];
       r_delta[i,k] = delta[i,k];
     }
+    // fill in missing values
     for (k in (n_arms[i]+1):max(n_arms)) {
       w[i,k] = 0;
       sw[i,k] = 0;
@@ -60,6 +61,10 @@ transformed parameters {
 model {
   vector [max(n_arms)] theta[n_trials];
   sdbt ~ uniform(0,10);
+
+  for (i in 1:(n_components)) {
+    d[i] ~ normal(0, 1000);
+  }
 
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);

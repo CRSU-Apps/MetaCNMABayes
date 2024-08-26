@@ -15,18 +15,12 @@ data {
 }
 parameters {
   vector [n_trials] mu;
-  vector[n_components] d;
+  row_vector[n_components] d;
 }
 model {
   // Define Probability Vector
   vector [max(n_arms)] p[n_trials];
   // Define Tempory vector (to set control to 0)
-  row_vector [n_components]D;
-
-  for(i in 1:(n_components)){
-    // Set D[n] to d[n-1]
-    D[i] = d[i];
-  }
 
   for(i in 1:(n_components)){
     d[i] ~ normal(0, 1000);
@@ -35,7 +29,7 @@ model {
   for (i in 1:n_trials) {
     mu[i] ~ normal(0, 1000);
     for (k in 1:n_arms[i]){
-      p[i,k] = mu[i] + (D * to_vector(components[,i,k]));
+      p[i,k] = mu[i] + (d * to_vector(components[,i,k]));
       r[i,k] ~ binomial_logit(n[i,k], p[i,k]);
     }
   }
