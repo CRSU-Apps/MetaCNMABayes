@@ -17,7 +17,7 @@ data {
 }
 parameters {
   vector [n_trials] mu;
-  vector[n_components] d;
+  row_vector[n_components] d;
 }
 model {
   // Define linear Prdictor
@@ -25,11 +25,6 @@ model {
   // Define Precision
   vector [max(n_arms)] prec[n_trials];
   // Define Tempory vector (to set control to 0)
-  row_vector [n_components]D;
-
-  for(i in 1:(n_components)){
-    D[i] = d[i];
-  }
 
   for(i in 1:(n_components)){
     d[i] ~ normal(0, 1000);
@@ -39,7 +34,7 @@ model {
     mu[i] ~ normal(0, 1000);
     for (k in 1:n_arms[i]){
       //prec[i,k] = n[i,k]/pow(sd[i,k],2);
-      theta[i,k] = mu[i] + (D * to_vector(components[,i,k]));
+      theta[i,k] = mu[i] + (d * to_vector(components[,i,k]));
       y[i,k] ~ normal(theta[i,k], ( sd[i,k] / sqrt(n[i,k]) ) );
     }
   }
