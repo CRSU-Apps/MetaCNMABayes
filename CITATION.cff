@@ -24,4 +24,4 @@ license: GPL-3.0-or-later
 message: If you use this software, please cite it using these metadata.
 repository-code: MetaCNMABayes
 title: "Bayesian Component Network Meta Analysis in R"
-version: 0.1.0
+version: 0.1.1
