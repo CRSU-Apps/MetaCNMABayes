@@ -151,7 +151,7 @@ get_xlim <- function(
   uci <- round(max(stan_summary$`97.5%`), 0)
 
   x_min <-  ifelse(binary, exp(lci) - 1, lci - 1)
-  x_max <-  ifelse(binary, exp(uci) - 1, uci + 1)
+  x_max <-  ifelse(binary, exp(uci) + 1, uci + 1)
 
   if (x_min < -10) {
     x_min <- -10
